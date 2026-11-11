@@ -1,0 +1,25 @@
+[project]
+name = "gigbid"
+version = "1.0.0"
+description = "GigBid: Multi-Agent Freelancer Copilot powered by LangGraph, Advanced RAG, and MCP"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn>=0.28.0",
+    "pydantic>=2.6.0",
+    "requests>=2.31.0",
+    "pyyaml>=6.0.1",
+    "jinja2>=3.1.3",
+    "python-multipart>=0.0.9"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0"
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

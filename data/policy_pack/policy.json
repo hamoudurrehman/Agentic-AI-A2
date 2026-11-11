@@ -1,0 +1,38 @@
+{
+  "prohibited_channels": [
+    "telegram",
+    "whatsapp",
+    "skype",
+    "email",
+    "gmail",
+    "phone",
+    "call me",
+    "direct paypal",
+    "crypto",
+    "wire transfer",
+    "wire"
+  ],
+  "prohibited_guarantees": [
+    "100% guarantee",
+    "guaranteed profit",
+    "guaranteed #1",
+    "risk free"
+  ],
+  "anti_scam_flags": [
+    "free sample before hiring",
+    "deposit check",
+    "send equipment money",
+    "unpaid test project",
+    "payment outside platform",
+    "telegram interview"
+  ],
+  "required_claim_evidence_types": [
+    "case_study",
+    "repo",
+    "past_proposal",
+    "review",
+    "metric"
+  ],
+  "max_proposals_per_day": 15,
+  "min_connects_reserve": 10
+}

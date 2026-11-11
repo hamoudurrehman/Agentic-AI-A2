@@ -1,0 +1,118 @@
+{
+  "id": "persona_aiml",
+  "name": "Dr. Sarah Chen",
+  "title": "Senior AI & Machine Learning Engineer",
+  "hourly_rate": 95,
+  "weekly_connects_budget": 120,
+  "bio": "Specialized in LLM agents, LangGraph workflows, RAG pipelines, fine-tuning, and low-latency computer vision systems. 7+ years of experience delivering scalable AI systems.",
+  "skills": [
+    "Python",
+    "LangChain",
+    "LangGraph",
+    "FastAPI",
+    "PyTorch",
+    "Transformers",
+    "RAG",
+    "ChromaDB",
+    "Qdrant",
+    "PostgreSQL",
+    "Docker",
+    "vLLM",
+    "Ollama"
+  ],
+  "case_studies": [
+    {
+      "id": "cs_aiml_01",
+      "title": "Enterprise Knowledge Agent with LangGraph & Hybrid RAG",
+      "client_industry": "FinTech",
+      "skills": [
+        "LangGraph",
+        "Python",
+        "RAG",
+        "FastAPI",
+        "PostgreSQL"
+      ],
+      "deliverables": "Autonomous multi-agent research copilot over 100k financial documents, achieving 94% evidence grounding and sub-second retrieval.",
+      "metrics": "Reduced analyst query time by 78%, processed 2.4M queries/month at $0.003/query.",
+      "full_text": "Built a production-grade multi-agent document analysis system utilizing LangGraph for parallel retrieval, BM25 + dense vector hybrid search, and cross-encoder reranking. Deployed using FastAPI and Redis cache."
+    },
+    {
+      "id": "cs_aiml_02",
+      "title": "Local LLM Fine-Tuning & High-Throughput Serving with vLLM",
+      "client_industry": "Healthcare",
+      "skills": [
+        "vLLM",
+        "PyTorch",
+        "Transformers",
+        "Docker",
+        "Python"
+      ],
+      "deliverables": "HIPAA-compliant on-premise clinical notes extraction system using quantized open-weight Llama-3-70B.",
+      "metrics": "Achieved 42 tok/sec throughput on 2x A10G GPUs with 99.2% extraction precision.",
+      "full_text": "Configured private inference engine with vLLM paged attention and continuous batching. Implemented strict PII masking and structured JSON output schema validation."
+    },
+    {
+      "id": "cs_aiml_03",
+      "title": "Real-time Defect Detection Pipeline with YOLO & TensorRT",
+      "client_industry": "Manufacturing",
+      "skills": [
+        "PyTorch",
+        "Computer Vision",
+        "Docker",
+        "Python"
+      ],
+      "deliverables": "Edge vision inspection system running on Jetson Orin with sub-15ms inference per frame.",
+      "metrics": "99.8% precision, eliminated $450k/year in undetected assembly defects.",
+      "full_text": "Custom YOLOv8 architecture optimized via TensorRT FP16 quantization. Deployed across 12 assembly lines with automated alerting."
+    }
+  ],
+  "repos": [
+    {
+      "name": "langgraph-agent-orchestrator",
+      "description": "Production state graph patterns with interrupt handling and Postgres persistence.",
+      "readme": "A resilient multi-agent architecture featuring parallel worker execution, human approval gates, and state rollback.",
+      "code_snippets": "class AgentState(TypedDict):\n    messages: list\n    approval_needed: bool"
+    },
+    {
+      "name": "hybrid-rag-engine",
+      "description": "Reciprocal rank fusion engine combining sparse BM25 and Qdrant dense embeddings.",
+      "readme": "Production RAG engine featuring claim verification, cross-encoder reranking, and citation metadata extraction.",
+      "code_snippets": "def rrf_merge(sparse_scores, dense_scores, k=60): ... return fused_results"
+    }
+  ],
+  "past_proposals": [
+    {
+      "id": "prop_aiml_01",
+      "job_title": "Build a multi-agent LangGraph workflow for customer support triage",
+      "proposal_text": "Hi! In a recent FinTech engagement (cs_aiml_01), I built a LangGraph state graph with parallel agents and human-in-the-loop approval, processing 2.4M queries/month. For your triage needs, I will design a structured state graph with explicit handoffs and guardrails. Let's discuss your ticketing API.",
+      "outcome": "won",
+      "client_feedback": "Sarah's exact experience with LangGraph made this project a huge success."
+    },
+    {
+      "id": "prop_aiml_02",
+      "job_title": "RAG pipeline optimization for legal contracts",
+      "proposal_text": "Hello. Naive RAG fails on legal clauses due to phrasing variations. Using hybrid BM25 + dense retrieval and claim verification (as shown in my hybrid-rag-engine project), we can guarantee zero hallucinations with citation footnotes.",
+      "outcome": "replied",
+      "client_feedback": "Great technical proposal."
+    },
+    {
+      "id": "prop_aiml_03",
+      "job_title": "Quick chatbot using OpenAI wrapper",
+      "proposal_text": "I can build any AI bot quickly and guarantee #1 rank in efficiency.",
+      "outcome": "ignored",
+      "client_feedback": null
+    }
+  ],
+  "reviews": [
+    {
+      "client": "Apex FinTech",
+      "rating": 5.0,
+      "comment": "Outstanding technical depth in agentic workflows."
+    },
+    {
+      "client": "BioHealth AI",
+      "rating": 5.0,
+      "comment": "Delivered HIPAA compliant local LLM on time and under budget."
+    }
+  ]
+}

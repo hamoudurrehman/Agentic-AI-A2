@@ -1,0 +1,32 @@
+{
+  "v0_naive": {
+    "evidence_recall_at_5": 0.6667,
+    "mrr": 0.875,
+    "ndcg_at_10": 0.6606
+  },
+  "v1_requirement_decomp": {
+    "evidence_recall_at_5": 0.6667,
+    "mrr": 0.75,
+    "ndcg_at_10": 0.6113
+  },
+  "v2_hybrid": {
+    "evidence_recall_at_5": 0.6667,
+    "mrr": 0.875,
+    "ndcg_at_10": 0.6525
+  },
+  "v3_cross_encoder": {
+    "evidence_recall_at_5": 0.6667,
+    "mrr": 0.875,
+    "ndcg_at_10": 0.7067
+  },
+  "v4_outcome_aware": {
+    "evidence_recall_at_5": 0.6667,
+    "mrr": 0.875,
+    "ndcg_at_10": 0.7067
+  },
+  "v8_corrective": {
+    "evidence_recall_at_5": 0.6667,
+    "mrr": 0.875,
+    "ndcg_at_10": 0.6525
+  }
+}

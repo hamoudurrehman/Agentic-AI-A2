@@ -1,0 +1,42 @@
+active_profile: open
+
+profiles:
+  open:
+    scout: "qwen3:4b"
+    job_analyst: "qwen3:8b"
+    risk_assessor: "qwen3:4b"
+    fit_matcher: "qwen3:8b"
+    pricing_strategist: "qwen3:8b"
+    proposal_writer: "qwen-3.6-27b-q4"
+    verifier: "qwen3:8b"
+    critic: "qwen-3.6-27b-q4"
+    compliance_guard: "qwen3:4b"
+    client_liaison: "qwen3:8b"
+    embeddings: "nomic-embed-text"
+    reranker: "bge-reranker-v2-m3"
+
+  paid:
+    scout: "gpt-oss-20b"
+    job_analyst: "gpt-oss-20b"
+    risk_assessor: "gpt-oss-20b"
+    fit_matcher: "gpt-oss-120b"
+    pricing_strategist: "gpt-oss-20b"
+    proposal_writer: "gpt-oss-120b"
+    verifier: "gpt-oss-20b"
+    critic: "gpt-oss-120b"
+    compliance_guard: "gpt-oss-20b"
+    client_liaison: "gpt-oss-120b"
+    embeddings: "qwen3-embedding-8b"
+    reranker: "qwen3-reranker"
+
+marketplace:
+  mode: "gigsim" # "gigsim" or "upwork_live"
+  poll_interval_seconds: 120
+  min_connects_reserve: 10
+  auto_skip_low_fit_threshold: 0.35
+
+budgets:
+  max_steps_per_thread: 15
+  max_tokens_per_thread: 16000
+  max_critic_iterations: 2
+  cost_ceiling_per_proposal_usd: 0.05

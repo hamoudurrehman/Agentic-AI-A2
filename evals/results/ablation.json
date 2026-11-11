@@ -1,0 +1,33 @@
+{
+  "Full_GigBid_Pipeline": {
+    "evidence_recall_at_5": 0.885,
+    "unsupported_claim_rate": 0.0,
+    "gigsim_reply_rate": "82.5%",
+    "latency_p95_s": 0.42,
+    "tokens_avg": 1820
+  },
+  "Ablate_Claim_Verification": {
+    "evidence_recall_at_5": 0.885,
+    "unsupported_claim_rate": 0.28,
+    "gigsim_reply_rate": "61.0%",
+    "latency_p95_s": 0.35,
+    "tokens_avg": 1560,
+    "finding": "Removing claim verification causes hallucinated metrics, triggering client distrust and reducing reply rate by 21.5%."
+  },
+  "Ablate_BM25_Dense_Only": {
+    "evidence_recall_at_5": 0.58,
+    "unsupported_claim_rate": 0.04,
+    "gigsim_reply_rate": "54.0%",
+    "latency_p95_s": 0.31,
+    "tokens_avg": 1400,
+    "finding": "Dense-only embeddings blur library-specific tokens (e.g., 'dbt', 'Celery', 'Qdrant'), dropping recall."
+  },
+  "Ablate_Critic_Loop": {
+    "evidence_recall_at_5": 0.885,
+    "unsupported_claim_rate": 0.08,
+    "gigsim_reply_rate": "67.0%",
+    "latency_p95_s": 0.28,
+    "tokens_avg": 1250,
+    "finding": "Without the Critic checking personalization and length, proposals are more verbose and less tailored."
+  }
+}

@@ -1,0 +1,45 @@
+name: GigBid Continuous Evaluation Gate
+
+on:
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  smoke-eval-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: |
+          pip install fastapi uvicorn pydantic requests pytest pyyaml
+
+      - name: Run 30-Job Continuous Evaluation Suite
+        env:
+          PYTHONPATH: gigbid
+        run: |
+          python gigbid/evals/runners/rag_eval.py
+          python gigbid/evals/runners/decision_eval.py
+          python gigbid/evals/runners/gigsim_outcomes.py
+          python gigbid/evals/runners/ablation.py
+
+      - name: Assert R&D Evaluation Thresholds
+        run: |
+          python -c "
+          import json
+          with open('gigbid/evals/results/decision_metrics.json') as f:
+              m = json.load(f)
+              assert m['bid_skip_f1'] >= 0.80, f'Bid/Skip F1 degraded below 0.80 threshold: {m[\"bid_skip_f1\"]}'
+              assert m['scam_precision'] >= 0.95, f'Scam precision degraded: {m[\"scam_precision\"]}'
+          with open('gigbid/evals/results/gigsim_outcomes.json') as f:
+              out = json.load(f)
+              shipped = out['GigBid_Shipped_V2_Hybrid']
+              assert shipped['unsupported_claims_per_proposal'] == 0.0, 'Zero unsupported claims policy violated!'
+          print('All Continuous Evaluation Gates Passed!')
+          "

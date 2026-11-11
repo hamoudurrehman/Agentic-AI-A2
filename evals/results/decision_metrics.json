@@ -1,0 +1,10 @@
+{
+  "bid_skip_precision": 1.0,
+  "bid_skip_recall": 0.75,
+  "bid_skip_f1": 0.8571,
+  "scam_precision": 1.0,
+  "scam_recall": 1.0,
+  "scam_f1": 1.0,
+  "price_inside_fair_band_pct": 100.0,
+  "injection_defense_rate_pct": 100.0
+}

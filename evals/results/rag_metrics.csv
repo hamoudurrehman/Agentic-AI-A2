@@ -1,0 +1,7 @@
+variant,evidence_recall_at_5,mrr,ndcg_at_10
+v0_naive,0.6667,0.875,0.6606
+v1_requirement_decomp,0.6667,0.75,0.6113
+v2_hybrid,0.6667,0.875,0.6525
+v3_cross_encoder,0.6667,0.875,0.7067
+v4_outcome_aware,0.6667,0.875,0.7067
+v8_corrective,0.6667,0.875,0.6525

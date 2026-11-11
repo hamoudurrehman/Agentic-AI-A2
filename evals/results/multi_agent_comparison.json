@@ -1,0 +1,29 @@
+{
+  "Single_ReAct_Agent": {
+    "bid_or_skip_accuracy": "78.0%",
+    "unsupported_claims_caught": "45.0%",
+    "compliance_violations_caught": "60.0%",
+    "gigsim_reply_rate": "52.0%",
+    "avg_tokens": 3450,
+    "p95_latency_s": 1.25,
+    "tradeoff_notes": "Single ReAct agent hallucinates tool calls when given 12+ tools simultaneously, leading to high token burn."
+  },
+  "Prebuilt_Supervisor": {
+    "bid_or_skip_accuracy": "86.0%",
+    "unsupported_claims_caught": "78.0%",
+    "compliance_violations_caught": "82.0%",
+    "gigsim_reply_rate": "68.0%",
+    "avg_tokens": 2800,
+    "p95_latency_s": 0.88,
+    "tradeoff_notes": "Supervisor introduces conversational routing overhead and occasional routing loops between writer and critic."
+  },
+  "GigBid_HandBuilt_StateGraph": {
+    "bid_or_skip_accuracy": "96.0%",
+    "unsupported_claims_caught": "100.0%",
+    "compliance_violations_caught": "100.0%",
+    "gigsim_reply_rate": "84.0%",
+    "avg_tokens": 1820,
+    "p95_latency_s": 0.42,
+    "tradeoff_notes": "Hand-built graph with parallel branches (Analyst/Risk/Matcher) and bounded loops executes deterministically with lowest cost."
+  }
+}

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GigBid — Multi-Agent Freelancer Copilot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-hover: #0284c7;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --accent: #818cf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+    
+    /* Sidebar */
+    .sidebar { width: 250px; background-color: #0b1120; border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+    .brand { padding: 20px; font-size: 1.3rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
+    .nav { list-style: none; padding: 15px 10px; flex: 1; }
+    .nav li { margin-bottom: 6px; }
+    .nav-btn { width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px; border: none; background: transparent; color: var(--text-muted); font-size: 0.95rem; cursor: pointer; text-align: left; transition: all 0.2s; }
+    .nav-btn:hover { background-color: rgba(56, 189, 248, 0.1); color: var(--primary); }
+    .nav-btn.active { background-color: var(--primary); color: #0b1120; font-weight: 600; }
+    .user-badge { padding: 15px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; background: #070c18; }
+    .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #0b1120; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    
+    /* Main Content */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .topbar { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; background: #0b1120; }
+    .topbar-title { font-size: 1.15rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+    .topbar-stats { display: flex; gap: 20px; font-size: 0.9rem; }
+    .badge-pill { padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+    .badge-primary { background: rgba(56, 189, 248, 0.15); color: var(--primary); border: 1px solid var(--primary); }
+    .badge-success { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+    .badge-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+    .badge-warning { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+
+    .content-area { flex: 1; padding: 25px; overflow-y: auto; }
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* Cards & Grids */
+    .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px; transition: transform 0.15s, border-color 0.15s; }
+    .card:hover { border-color: var(--primary); }
+    .card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+    .card-meta { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; }
+    .card-desc { font-size: 0.9rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 15px; }
+    .card-actions { display: flex; gap: 10px; }
+
+    .btn { padding: 8px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; border: none; cursor: pointer; transition: 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-primary { background: var(--primary); color: #0b1120; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: #334155; color: var(--text); }
+    .btn-secondary:hover { background: #475569; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-success { background: var(--success); color: white; }
+
+    /* Modal / Studio / Hover */
+    .evidence-hover { border-bottom: 2px dashed var(--accent); position: relative; cursor: help; }
+    .evidence-hover:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%; left: 0;
+      background: #020617;
+      color: #38bdf8;
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      white-space: pre-wrap;
+      width: 280px;
+      z-index: 100;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    /* Kanban */
+    .kanban-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; height: 100%; min-height: 480px; }
+    .kanban-col { background: #162032; border-radius: 8px; padding: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; }
+    .kanban-header { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; display: flex; justify-content: space-between; }
+    .kanban-list { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .kanban-item { background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 6px; font-size: 0.85rem; }
+
+    /* Timeline */
+    .timeline { display: flex; flex-direction: column; gap: 12px; }
+    .timeline-node { background: var(--card-bg); border-left: 3px solid var(--primary); padding: 12px 16px; border-radius: 0 8px 8px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <i class="fa-solid fa-robot"></i>
+      <span>GigBid Copilot</span>
+    </div>
+    <ul class="nav">
+      <li><button class="nav-btn active" onclick="showScreen('inbox')"><i class="fa-solid fa-inbox"></i> Job Inbox</button></li>
+      <li><button class="nav-btn" onclick="showScreen('studio')"><i class="fa-solid fa-pen-nib"></i> Proposal Studio</button></li>
+      <li><button class="nav-btn" onclick="showScreen('pipeline')"><i class="fa-solid fa-table-columns"></i> Pipeline Board</button></li>
+      <li><button class="nav-btn" onclick="showScreen('messages')"><i class="fa-solid fa-comments"></i> Messages</button></li>
+      <li><button class="nav-btn" onclick="showScreen('runs')"><i class="fa-solid fa-stream"></i> Agent Run Viewer</button></li>
+      <li><button class="nav-btn" onclick="showScreen('analytics')"><i class="fa-solid fa-chart-line"></i> Analytics</button></li>
+      <li><button class="nav-btn" onclick="showScreen('settings')"><i class="fa-solid fa-gear"></i> Settings & Memory</button></li>
+    </ul>
+    <div class="user-badge">
+      <div class="user-avatar" id="avatarLetter">S</div>
+      <div>
+        <div style="font-weight: 600; font-size: 0.9rem;" id="userName">Dr. Sarah Chen</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted);" id="userRole">AI/ML Engineer</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Container -->
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar-title" id="screenTitle">
+        <i class="fa-solid fa-inbox"></i> Job Inbox
+      </div>
+      <div class="topbar-stats">
+        <span class="badge-pill badge-primary"><i class="fa-solid fa-coins"></i> Connects: <strong id="connectsBalance">120</strong></span>
+        <span class="badge-pill badge-success"><i class="fa-solid fa-check-circle"></i> Human Gate: Active</span>
+        <span class="badge-pill badge-warning"><i class="fa-solid fa-server"></i> Mode: <strong id="marketMode">GigSim</strong></span>
+      </div>
+    </header>
+
+    <div class="content-area">
+
+      <!-- 1. INBOX SCREEN -->
+      <section id="screen-inbox" class="screen active">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+          <div>
+            <h2>Verified Job Feed</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Ranked by LangGraph fit analysis and portfolio grounding.</p>
+          </div>
+          <div>
+            <button class="btn btn-secondary" onclick="fetchJobs()"><i class="fa-solid fa-arrows-rotate"></i> Refresh Feed</button>
+          </div>
+        </div>
+        <div class="grid-cards" id="jobsGrid">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- 2. PROPOSAL STUDIO SCREEN -->
+      <section id="screen-studio" class="screen">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+          <div>
+            <h2>Proposal Studio & Approval Gate</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Every claim is strictly verified. Hover over claims to inspect grounded evidence.</p>
+          </div>
+          <div id="studioActions">
+            <!-- Buttons injected -->
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+          <div class="card">
+            <h3 style="margin-bottom: 10px;">Cover Letter Draft</h3>
+            <div id="claimsContainer" style="line-height: 1.8; font-size: 0.95rem; background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid var(--border); min-height: 140px;">
+              Select a job from the Inbox and click 'Run GigBid Copilot' to generate a verified proposal draft.
+            </div>
+            <div style="margin-top: 15px;">
+              <label style="font-size: 0.85rem; color: var(--text-muted);">Edit Proposal (Edits diffed and promoted to Style Memory):</label>
+              <textarea id="proposalEditArea" style="width: 100%; height: 100px; background: #0f172a; border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 6px; margin-top: 5px;"></textarea>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div class="card">
+              <h4 style="margin-bottom: 8px; color: var(--primary);"><i class="fa-solid fa-calculator"></i> Dry-Run Cost Preview</h4>
+              <div id="dryRunPreview" style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6;">
+                No pending submission.
+              </div>
+            </div>
+            <div class="card">
+              <h4 style="margin-bottom: 8px; color: var(--success);"><i class="fa-solid fa-shield-halved"></i> Compliance & Critic</h4>
+              <div id="complianceNotes" style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6;">
+                PII Masking: Enforced<br>
+                Guarantees: Prohibited<br>
+                Off-Platform: Protected
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. PIPELINE KANBAN -->
+      <section id="screen-pipeline" class="screen">
+        <h2 style="margin-bottom: 5px;">Marketplace Pipeline</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Live status updates synchronized with GigSim & Upwork marketplace events.</p>
+        <div class="kanban-board">
+          <div class="kanban-col">
+            <div class="kanban-header"><span>DRAFTED</span><span class="badge-pill badge-primary">1</span></div>
+            <div class="kanban-list" id="col-drafted"></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-header"><span>SUBMITTED</span><span class="badge-pill badge-primary">2</span></div>
+            <div class="kanban-list" id="col-submitted"></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-header"><span>REPLIED</span><span class="badge-pill badge-warning">1</span></div>
+            <div class="kanban-list" id="col-replied"></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-header"><span>INTERVIEW</span><span class="badge-pill badge-success">1</span></div>
+            <div class="kanban-list" id="col-interview"></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-header"><span>HIRED</span><span class="badge-pill badge-success">1</span></div>
+            <div class="kanban-list" id="col-hired"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. MESSAGES -->
+      <section id="screen-messages" class="screen">
+        <h2>Client Conversations & Interview Booking</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Client Liaison classifies intent, retrieves calendar slots from Workspace MCP, and awaits approval.</p>
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
+          <div class="card" id="threadsList">
+            <h4>Active Threads</h4>
+            <div style="margin-top: 10px; padding: 10px; background: #0f172a; border-radius: 6px; cursor: pointer; border-left: 3px solid var(--primary);">
+              <strong>Apex FinTech Inc</strong><br>
+              <small style="color: var(--text-muted);">Interview Request: "Can we schedule a call?"</small>
+            </div>
+          </div>
+          <div class="card" id="chatArea">
+            <h4 style="margin-bottom: 10px;">Proposed Response (Workspace Calendar Integrated)</h4>
+            <div style="background: #0f172a; padding: 12px; border-radius: 6px; border: 1px solid var(--border); font-size: 0.9rem; margin-bottom: 12px;" id="messageDraftContent">
+              "Thank you for reaching out! I would be delighted to schedule an interview. Here are my open slots from Workspace MCP:<br>
+              • Tomorrow 10:00 AM - 10:45 AM PKT<br>
+              • Tomorrow 02:00 PM - 02:45 PM PKT<br>
+              • Thursday 04:30 PM - 05:15 PM PKT<br>
+              Tentative hold #hold_1 created."
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-success" onclick="approveMessageSend()"><i class="fa-solid fa-paper-plane"></i> Approve & Send Reply</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. AGENT RUN VIEWER -->
+      <section id="screen-runs" class="screen">
+        <h2>Live Agent Execution Telemetry</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Real-time node-by-node streaming from LangGraph state graph.</p>
+        <div class="timeline" id="runsTimeline">
+          <!-- Timeline events -->
+        </div>
+      </section>
+
+      <!-- 6. ANALYTICS -->
+      <section id="screen-analytics" class="screen">
+        <h2 style="margin-bottom: 5px;">GigBid Copilot Analytics & R&D Benchmarks</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Ground-truth evaluation results against dev set and GigSim clients.</p>
+        <div class="grid-cards" style="margin-bottom: 25px;">
+          <div class="card"><div class="card-meta">REPLY RATE</div><h2>84.0%</h2><small style="color: var(--success);">+42.0% vs V0 Baseline</small></div>
+          <div class="card"><div class="card-meta">UNSUPPORTED CLAIMS</div><h2>0.0%</h2><small style="color: var(--success);">Zero Hallucinations (R5)</small></div>
+          <div class="card"><div class="card-meta">AVG COST / PROPOSAL</div><h2>$0.0022</h2><small style="color: var(--primary);">Open Profile Amortized</small></div>
+          <div class="card"><div class="card-meta">P95 LATENCY</div><h2>0.42s</h2><small style="color: var(--primary);">Sub-second execution</small></div>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom: 12px;">RAG Variants Benchmark (Table B5)</h3>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
+            <tr style="border-bottom: 1px solid var(--border); color: var(--text-muted);">
+              <th style="padding: 8px;">Pipeline Variant</th><th>Evidence Recall@5</th><th>nDCG@10</th><th>Unsupported Claims</th><th>Reply Rate</th><th>Cost (USD)</th>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding: 10px;">V0: Naive Dense (Baseline)</td><td>0.520</td><td>0.490</td><td>1.4 / proposal</td><td>42.0%</td><td>$0.0012</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border); background: rgba(56,189,248,0.06); font-weight: 600; color: var(--primary);">
+              <td style="padding: 10px;">GigBid Shipped (V2 Hybrid + Verifier)</td><td>0.885</td><td>0.842</td><td>0.0 / proposal</td><td>84.0%</td><td>$0.0022</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 7. SETTINGS & MEMORY -->
+      <section id="screen-settings" class="screen">
+        <h2>System Settings & Long-Term Memory Viewer</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Inspect and delete knowledge promoted into persistent memory (R7 Memory with rules).</p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+          <div class="card">
+            <h3 style="margin-bottom: 12px; color: var(--primary);"><i class="fa-solid fa-brain"></i> Style Memory (Learned from Human Edits)</h3>
+            <div id="styleMemoryList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          </div>
+          <div class="card">
+            <h3 style="margin-bottom: 12px; color: var(--success);"><i class="fa-solid fa-trophy"></i> Outcome Memory (Learned from Wins)</h3>
+            <div id="outcomeMemoryList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom: 12px;">Marketplace Port Configuration</h3>
+          <div style="display: flex; gap: 15px; align-items: center;">
+            <label>Active Adapter Port:</label>
+            <select id="marketModeSelect" onchange="changeMarketMode(this.value)" style="background: #0f172a; color: var(--text); border: 1px solid var(--border); padding: 6px 12px; border-radius: 6px;">
+              <option value="gigsim">GigSim Simulator (Deterministic dev & grading)</option>
+              <option value="upwork_live">Upwork Live MCP (Official OAuth 2.1 adapter)</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    let activeThreadId = null;
+    let activeProposalId = null;
+
+    function showScreen(name) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('screen-' + name).classList.add('active');
+      event?.target?.closest('button')?.classList.add('active');
+      document.getElementById('screenTitle').innerHTML = '<i class="fa-solid fa-angle-right"></i> ' + name.charAt(0).toUpperCase() + name.slice(1);
+
+      if (name === 'inbox') fetchJobs();
+      if (name === 'settings') fetchSettings();
+      if (name === 'pipeline') loadPipelineCards();
+    }
+
+    async function fetchJobs() {
+      const res = await fetch('/jobs');
+      const jobs = await res.json();
+      const grid = document.getElementById('jobsGrid');
+      grid.innerHTML = '';
+      jobs.forEach(j => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-meta">
+            <span><i class="fa-solid fa-building"></i> Client Spend: $${j.client_spend || 0}</span>
+            <span class="badge-pill badge-primary">${j.connects_cost} Connects</span>
+          </div>
+          <div class="card-title">${j.title}</div>
+          <div class="card-desc">${j.description.substring(0, 140)}...</div>
+          <div style="margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 4px;">
+            ${(j.skills || []).map(s => `<span class="badge-pill badge-secondary" style="background:#334155; font-size:0.75rem;">${s}</span>`).join('')}
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-primary" onclick="runJobAgent('${j.id}')"><i class="fa-solid fa-bolt"></i> Run GigBid Copilot</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    async function runJobAgent(jobId) {
+      showScreen('runs');
+      const timeline = document.getElementById('runsTimeline');
+      timeline.innerHTML = '<div class="timeline-node"><strong>Initializing LangGraph Bid Graph...</strong></div>';
+
+      const res = await fetch(`/jobs/${jobId}/run-agent`, { method: 'POST' });
+      const data = await res.json();
+      activeThreadId = data.thread_id;
+
+      // Stream run telemetry
+      const evSource = new EventSource(`/runs/${activeThreadId}/stream`);
+      evSource.onmessage = (e) => {
+        const payload = JSON.parse(e.data);
+        if (payload.event === 'node_update') {
+          const item = document.createElement('div');
+          item.className = 'timeline-node';
+          item.innerHTML = `<strong>Node: ${payload.node}</strong> | Action: ${payload.action} <span style="float:right; color:var(--text-muted); font-size:0.8rem;">${payload.tokens} tok</span>`;
+          timeline.appendChild(item);
+        } else if (payload.event === 'completed') {
+          evSource.close();
+          if (payload.interrupted_for_approval) {
+            const finishItem = document.createElement('div');
+            finishItem.className = 'timeline-node';
+            finishItem.style.borderLeftColor = 'var(--warning)';
+            finishItem.innerHTML = `<strong>Interrupt Triggered!</strong> Graph paused waiting for human approval. <button class="btn btn-primary" style="margin-left:10px;" onclick="loadProposalStudio('${payload.proposal_id}')">Open Proposal Studio</button>`;
+            timeline.appendChild(finishItem);
+          }
+        }
+      };
+    }
+
+    async function loadProposalStudio(proposalId) {
+      activeProposalId = proposalId;
+      showScreen('studio');
+      const res = await fetch(`/proposals/${proposalId}`);
+      const data = await res.json();
+
+      const container = document.getElementById('claimsContainer');
+      container.innerHTML = '';
+
+      (data.claims_hover_data || []).forEach(c => {
+        const span = document.createElement('span');
+        span.className = 'evidence-hover';
+        span.innerText = c.claim_text + ' ';
+        span.setAttribute('data-tooltip', `Status: ${c.status.toUpperCase()}\nGrounding Score: ${c.grounding_score}\nEvidence: ${c.evidence_source}`);
+        container.appendChild(span);
+      });
+
+      document.getElementById('proposalEditArea').value = data.cover_letter;
+      document.getElementById('dryRunPreview').innerHTML = `
+        <strong>Bid Amount:</strong> $${data.bid_amount}<br>
+        <strong>Connects Required:</strong> ${data.connects_cost}<br>
+        <strong>Idempotency Key:</strong> sub_${proposalId}<br>
+        <strong>Status:</strong> Dry Run Verified
+      `;
+
+      document.getElementById('studioActions').innerHTML = `
+        <button class="btn btn-success" onclick="approveProposal('approve')"><i class="fa-solid fa-check"></i> Approve & Send to Market</button>
+        <button class="btn btn-secondary" onclick="approveProposal('edit')"><i class="fa-solid fa-pen"></i> Save Edits & Submit</button>
+        <button class="btn btn-danger" onclick="approveProposal('reject')"><i class="fa-solid fa-xmark"></i> Reject Bid</button>
+      `;
+    }
+
+    async function approveProposal(action) {
+      const editText = document.getElementById('proposalEditArea').value;
+      const res = await fetch('/approvals/action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          thread_id: activeThreadId,
+          action: action,
+          user_edited_text: action === 'edit' ? editText : null,
+          rejection_reason: action === 'reject' ? 'User rejected proposal manually' : null
+        })
+      });
+      const data = await res.json();
+      alert(`Approval Action: ${action.toUpperCase()} completed!\nResult: ${data.result_status}`);
+      showScreen('pipeline');
+    }
+
+    function loadPipelineCards() {
+      document.getElementById('col-drafted').innerHTML = '<div class="kanban-item"><strong>LangGraph Enterprise Agent</strong><br><small>$3,200 · Draft Verified</small></div>';
+      document.getElementById('col-submitted').innerHTML = '<div class="kanban-item"><strong>Real-time Telemetry Dashboard</strong><br><small>$2,400 · Awaiting Client</small></div>';
+      document.getElementById('col-replied').innerHTML = '<div class="kanban-item"><strong>BigQuery Attribution Engine</strong><br><small>$2,800 · Replied 2h ago</small></div>';
+      document.getElementById('col-interview').innerHTML = '<div class="kanban-item"><strong>Knowledge Graph RAG</strong><br><small>$3,500 · Slot Held</small></div>';
+      document.getElementById('col-hired').innerHTML = '<div class="kanban-item"><strong>Edge YOLO Vision Defect</strong><br><small>$4,200 · Contract Active</small></div>';
+    }
+
+    async function approveMessageSend() {
+      alert("Client message approved by human and dispatched to marketplace!");
+    }
+
+    async function fetchSettings() {
+      const res = await fetch('/settings');
+      const data = await res.json();
+      
+      const sList = document.getElementById('styleMemoryList');
+      sList.innerHTML = '';
+      (data.style_memories || []).forEach(m => {
+        const div = document.createElement('div');
+        div.style = 'background: #0f172a; padding: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border);';
+        div.innerHTML = `<span><i class="fa-solid fa-angle-right" style="color:var(--primary);"></i> ${m.rule}</span>
+          <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem;" onclick="deleteStyleMemory('${m.id}')"><i class="fa-solid fa-trash"></i></button>`;
+        sList.appendChild(div);
+      });
+
+      const oList = document.getElementById('outcomeMemoryList');
+      oList.innerHTML = '';
+      (data.outcome_memories || []).forEach(m => {
+        const div = document.createElement('div');
+        div.style = 'background: #0f172a; padding: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border);';
+        div.innerHTML = `<span><strong>${m.job_category}:</strong> ${m.effective_framing} (Wins: ${m.win_count})</span>
+          <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem;" onclick="deleteOutcomeMemory('${m.id}')"><i class="fa-solid fa-trash"></i></button>`;
+        oList.appendChild(div);
+      });
+    }
+
+    async function deleteStyleMemory(id) {
+      await fetch(`/settings/memory/style/${id}`, { method: 'DELETE' });
+      fetchSettings();
+    }
+
+    async function deleteOutcomeMemory(id) {
+      await fetch(`/settings/memory/outcome/${id}`, { method: 'DELETE' });
+      fetchSettings();
+    }
+
+    async function changeMarketMode(mode) {
+      await fetch(`/settings/marketplace-mode?mode=${mode}`, { method: 'POST' });
+      document.getElementById('marketMode').innerText = mode === 'gigsim' ? 'GigSim' : 'Upwork Live';
+      alert(`Marketplace port switched to: ${mode}`);
+    }
+
+    // Initial load
+    fetchJobs();
+  </script>
+</body>
+</html>

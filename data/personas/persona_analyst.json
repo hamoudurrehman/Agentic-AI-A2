@@ -1,0 +1,59 @@
+{
+  "id": "persona_analyst",
+  "name": "Maya Patel",
+  "title": "Principal Data Analyst & Business Intelligence Specialist",
+  "hourly_rate": 75,
+  "weekly_connects_budget": 90,
+  "bio": "Transforming complex raw data into actionable decision frameworks. Specialist in SQL, dbt, BigQuery, Tableau, and automated forecasting pipelines.",
+  "skills": [
+    "SQL",
+    "Python",
+    "BigQuery",
+    "dbt",
+    "PostgreSQL",
+    "Tableau",
+    "Pandas",
+    "Statistical Modeling",
+    "PowerBI"
+  ],
+  "case_studies": [
+    {
+      "id": "cs_da_01",
+      "title": "Multi-Channel Attribution & Customer Lifetime Value Model",
+      "client_industry": "E-Commerce",
+      "skills": [
+        "SQL",
+        "Python",
+        "BigQuery",
+        "Statistical Modeling"
+      ],
+      "deliverables": "Automated attribution model analyzing $80M in marketing spend across Google, Meta, and TikTok.",
+      "metrics": "Identified 22% ad budget waste and improved marketing ROAS by 1.8x within 90 days.",
+      "full_text": "Built dbt models on BigQuery with Markov chain attribution logic and automated reporting in Tableau."
+    }
+  ],
+  "repos": [
+    {
+      "name": "dbt-attribution-modeling",
+      "description": "Modular dbt models for multi-touch attribution and cohort retention analysis.",
+      "readme": "Includes clean schema tests, documentation, and BigQuery cost optimization.",
+      "code_snippets": "WITH cohorts AS (SELECT user_id, date_trunc(signup_date, MONTH) ...)"
+    }
+  ],
+  "past_proposals": [
+    {
+      "id": "prop_da_01",
+      "job_title": "Build cohort retention and LTV dashboard in BigQuery & Tableau",
+      "proposal_text": "Hello! I recently built a multi-channel attribution and retention model for an $80M e-commerce brand (cs_da_01), uncovering 22% waste. I can model your raw PostgreSQL events into clean dbt tables and interactive visualizations.",
+      "outcome": "won",
+      "client_feedback": "Maya provided immediate clarity to our leadership team."
+    }
+  ],
+  "reviews": [
+    {
+      "client": "DirectRetail",
+      "rating": 5.0,
+      "comment": "Fantastic data rigor and clear business storytelling."
+    }
+  ]
+}

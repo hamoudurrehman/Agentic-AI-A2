@@ -1,0 +1,77 @@
+{
+  "id": "persona_fullstack",
+  "name": "Alex Rivera",
+  "title": "Full-Stack Web & Systems Architect",
+  "hourly_rate": 85,
+  "weekly_connects_budget": 100,
+  "bio": "Expert in React/Next.js, TypeScript, FastAPI, PostgreSQL, and scalable real-time architectures with WebSockets and SSE. 6+ years shipping high-performance web applications.",
+  "skills": [
+    "React",
+    "Next.js",
+    "TypeScript",
+    "FastAPI",
+    "Python",
+    "Node.js",
+    "PostgreSQL",
+    "TailwindCSS",
+    "Redis",
+    "Docker",
+    "Playwright",
+    "GraphQL"
+  ],
+  "case_studies": [
+    {
+      "id": "cs_fs_01",
+      "title": "Real-Time Collaboration Dashboard with Next.js & Server-Sent Events",
+      "client_industry": "SaaS / B2B",
+      "skills": [
+        "React",
+        "TypeScript",
+        "FastAPI",
+        "Redis",
+        "PostgreSQL"
+      ],
+      "deliverables": "High-throughput dashboard streaming live agent telemetry, task pipelines, and collaborative state.",
+      "metrics": "Sub-50ms latency over 50,000 concurrent WebSocket connections; zero UI freezes.",
+      "full_text": "Engineered a TypeScript client with automated OpenAPI schema generation, optimistic UI updates, and SSE streaming channels backed by Redis pub/sub."
+    },
+    {
+      "id": "cs_fs_02",
+      "title": "High-Volume B2B E-Commerce Marketplace",
+      "client_industry": "Logistics & Retail",
+      "skills": [
+        "Next.js",
+        "PostgreSQL",
+        "Docker",
+        "TailwindCSS"
+      ],
+      "deliverables": "Full marketplace with role-based auth, payment gateways, and inventory synchronization.",
+      "metrics": "Handled $12M gross merchandise value with 99.98% uptime.",
+      "full_text": "Built responsive React interface paired with a modular Python/FastAPI microservice backend and PostgreSQL ACID transactions."
+    }
+  ],
+  "repos": [
+    {
+      "name": "fastapi-react-realtime-starter",
+      "description": "Enterprise boilerplate with OpenAPI code generation, SSE streaming, and OAuth 2.1.",
+      "readme": "Production template featuring FastAPI, React 19, typed endpoints, and Playwright e2e suites.",
+      "code_snippets": "export const useStream = (url: string) => { ... }"
+    }
+  ],
+  "past_proposals": [
+    {
+      "id": "prop_fs_01",
+      "job_title": "Build responsive React dashboard streaming AI outputs",
+      "proposal_text": "Hi! In my recent SaaS engagement (cs_fs_01), I built a real-time Next.js + FastAPI dashboard streaming agent outputs via SSE with sub-50ms latency. I will deliver a clean TypeScript UI with dark mode, approval gates, and mobile responsiveness.",
+      "outcome": "won",
+      "client_feedback": "Alex built the cleanest, most responsive UI we have ever had."
+    }
+  ],
+  "reviews": [
+    {
+      "client": "ScaleFlow Inc",
+      "rating": 5.0,
+      "comment": "Alex is our go-to frontend and full-stack engineer."
+    }
+  ]
+}
