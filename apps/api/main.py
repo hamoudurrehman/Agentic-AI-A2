@@ -16,6 +16,16 @@ PARENT_DIR = os.path.dirname(BASE_DIR)
 if PARENT_DIR not in sys.path:
     sys.path.insert(0, PARENT_DIR)
 
+# Alias current directory as 'gigbid' module if running from repository root
+import types
+if "gigbid" not in sys.modules:
+    try:
+        import gigbid
+    except ImportError:
+        gigbid_mod = types.ModuleType("gigbid")
+        gigbid_mod.__path__ = [BASE_DIR]
+        sys.modules["gigbid"] = gigbid_mod
+
 from apps.api.routers import auth, jobs, proposals, approvals, messages, runs, analytics, settings
 from gigbid.agent.mcp_client import mcp_client_instance
 
