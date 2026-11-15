@@ -25,18 +25,18 @@ jobs:
 
       - name: Run Unit Tests
         env:
-          PYTHONPATH: gigbid
+          PYTHONPATH: .
         run: |
-          pytest gigbid/tests/unit gigbid/mcp_servers -v
+          pytest tests/unit mcp_servers -v
 
       - name: Run MCP Contract Snapshot Tests
         env:
-          PYTHONPATH: gigbid
+          PYTHONPATH: .
         run: |
-          pytest gigbid/tests/contract -v
+          pytest tests/contract -v
 
       - name: Run Multi-Agent Integration Tests
         env:
-          PYTHONPATH: gigbid
+          PYTHONPATH: .
         run: |
-          pytest gigbid/tests/integration -v
+          pytest tests/integration -v
