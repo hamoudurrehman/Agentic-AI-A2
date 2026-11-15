@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gigbid-portfolio-mcp"
+version = "1.0.0"
+description = "Model Context Protocol (MCP) server for developer portfolio evidence search"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.0.0"
+]
+
+[project.scripts]
+gigbid-portfolio-server = "gigbid.mcp_servers.portfolio.server:main"
